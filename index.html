@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Archipelago Passage Planner</title>
+    <meta
+      name="description"
+      content="Wind-routed sailing time estimates for the Finnish archipelago. Plot a route, pick a departure, and see when you'll actually arrive."
+    />
+    <link rel="manifest" href="/archipelago-passage-planner/manifest.webmanifest" />
+    <link rel="icon" href="/archipelago-passage-planner/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/archipelago-passage-planner/icon-512.png" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" crossorigin src="/archipelago-passage-planner/assets/index-B_HEDmfw.js"></script>
+    <link rel="stylesheet" crossorigin href="/archipelago-passage-planner/assets/index-C8gxQOqS.css">
+  </head>
+
+  <body>
+    <script>
+      // Browsers suspend requestAnimationFrame in hidden tabs, which freezes
+      // MapLibre's style/render loop. Fall back to a timer so the map keeps
+      // working when the tab is backgrounded (or embedded headlessly).
+      (() => {
+        const nativeRaf = window.requestAnimationFrame.bind(window);
+        const nativeCancel = window.cancelAnimationFrame.bind(window);
+        const fallbacks = new Map();
+        window.requestAnimationFrame = (cb) => {
+          let done = false;
+          const fire = (t) => {
+            if (done) return;
+            done = true;
+            fallbacks.delete(id);
+            cb(t);
+          };
+          const id = nativeRaf(fire);
+          fallbacks.set(id, setTimeout(() => fire(performance.now()), 60));
+          return id;
+        };
+        window.cancelAnimationFrame = (id) => {
+          nativeCancel(id);
+          clearTimeout(fallbacks.get(id));
+          fallbacks.delete(id);
+        };
+      })();
+    </script>
+    <div id="root"></div>
+  </body>
+</html>
