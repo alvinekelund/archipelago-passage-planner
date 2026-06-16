@@ -19,11 +19,92 @@
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <script type="module" crossorigin src="/archipelago-passage-planner/assets/index-BJOlJW5O.js"></script>
-    <link rel="stylesheet" crossorigin href="/archipelago-passage-planner/assets/index-DNsuniAh.css">
+    <script type="module" crossorigin src="/archipelago-passage-planner/assets/index-D6ccETdu.js"></script>
+    <link rel="stylesheet" crossorigin href="/archipelago-passage-planner/assets/index-BUwiEI48.css">
   </head>
 
   <body>
+    <!-- Instant branded splash, shown before the JS bundle even parses and
+         faded out by the app once the map + wind forecast are ready. -->
+    <div id="splash" aria-hidden="true">
+      <div class="splash-inner">
+        <svg width="68" height="68" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="64" height="64" rx="16" fill="#0a7cff" />
+          <path d="M32 12 C38 22 39 31 39 38 C39 46 36 51 32 53 C28 51 25 46 25 38 C25 31 26 22 32 12 Z" fill="#fff" />
+          <circle cx="32" cy="38" r="3.2" fill="#0a7cff" />
+          <path d="M15 49 Q32 59 49 49" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" opacity="0.8" />
+        </svg>
+        <div class="splash-title">Archipelago Passage Planner</div>
+        <div class="splash-sub">Loading charts, fairways &amp; wind…</div>
+        <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+      </div>
+    </div>
+    <style>
+      #splash {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f2f5f8;
+        transition: opacity 0.5s ease;
+      }
+      #splash.hide {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .splash-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: "Manrope", system-ui, -apple-system, sans-serif;
+      }
+      #splash svg {
+        filter: drop-shadow(0 8px 20px rgba(10, 124, 255, 0.3));
+        animation: splash-bob 2.4s ease-in-out infinite;
+      }
+      .splash-title {
+        margin-top: 18px;
+        font-weight: 800;
+        font-size: 18px;
+        letter-spacing: -0.01em;
+        color: #18202c;
+      }
+      .splash-sub {
+        margin-top: 6px;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: rgba(24, 32, 44, 0.55);
+      }
+      .splash-bar {
+        margin-top: 20px;
+        width: 150px;
+        height: 3px;
+        border-radius: 2px;
+        background: rgba(24, 32, 44, 0.1);
+        overflow: hidden;
+      }
+      .splash-bar-fill {
+        width: 40%;
+        height: 100%;
+        border-radius: 2px;
+        background: #0a7cff;
+        animation: splash-slide 1.3s ease-in-out infinite;
+      }
+      @keyframes splash-bob {
+        0%, 100% { transform: translateY(0) rotate(-3deg); }
+        50% { transform: translateY(-6px) rotate(3deg); }
+      }
+      @keyframes splash-slide {
+        0% { transform: translateX(-110%); }
+        100% { transform: translateX(385%); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #splash svg { animation: none; }
+        .splash-bar-fill { width: 100%; animation: none; }
+      }
+    </style>
     <script>
       // Browsers suspend requestAnimationFrame in hidden tabs, which freezes
       // MapLibre's style/render loop. Fall back to a timer so the map keeps
